@@ -2,18 +2,8 @@
 pragma solidity ^0.8.4;
 
 import {CoinbaseSmartWallet} from "./CoinbaseSmartWallet.sol";
+import {concat} from "./utils/concat.sol";
 import {LibClone} from "solady/utils/LibClone.sol";
-
-function concat(bytes[] memory left, bytes[] memory right) returns (bytes[] memory) {
-    bytes[] memory combined = new bytes[](left.length + right.length);
-    for (uint256 i = 0; i < left.length; i++) {
-        combined[i] = left[i];
-    }
-    for (uint256 i = 0; i < right.length; i++) {
-        combined[left.length + i] = right[i];
-    }
-    return combined;
-}
 
 /// @title Coinbase Smart Wallet Factory
 ///
