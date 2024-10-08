@@ -4,6 +4,17 @@ pragma solidity ^0.8.4;
 import {CoinbaseSmartWallet} from "./CoinbaseSmartWallet.sol";
 import {LibClone} from "solady/utils/LibClone.sol";
 
+function concat(bytes[] memory left, bytes[] memory right) returns (bytes[] memory) {
+    bytes[] memory combined = new bytes[](left.length + right.length);
+    for (uint256 i = 0; i < left.length; i++) {
+        combined[i] = left[i];
+    }
+    for (uint256 i = 0; i < right.length; i++) {
+        combined[left.length + i] = right[i];
+    }
+    return combined;
+}
+
 /// @title Coinbase Smart Wallet Factory
 ///
 /// @notice CoinbaseSmartWallet factory, based on Solady's ERC4337Factory.
@@ -30,13 +41,15 @@ contract CoinbaseSmartWalletFactory {
     ///
     /// @dev Deployed as a ERC-1967 proxy that's implementation is `this.implementation`.
     ///
-    /// @param owners Array of initial owners. Each item should be an ABI encoded address or 64 byte public key.
+    /// @param owners Array of owners. Each item should be an ABI encoded address or 64 byte public key.
     /// @param nonce  The nonce of the account, a caller defined value which allows multiple accounts
     ///               with the same `owners` to exist at different addresses.
+    /// @param initializers Array of additional initial owners. Each item should be an ABI encoded address
+    ///                     or 64 byte public key. These are not included in determining the account salt.
     ///
     /// @return account The address of the ERC-1967 proxy created with inputs `owners`, `nonce`, and
     ///                 `this.implementation`.
-    function createAccount(bytes[] calldata owners, uint256 nonce)
+    function createAccount(bytes[] calldata owners, uint256 nonce, bytes[] calldata initializers)
         external
         payable
         virtual
@@ -52,7 +65,7 @@ contract CoinbaseSmartWalletFactory {
         account = CoinbaseSmartWallet(payable(accountAddress));
 
         if (!alreadyDeployed) {
-            account.initialize(owners);
+            account.initialize(concat(owners, initializers));
         }
     }
 
