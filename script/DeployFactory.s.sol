@@ -7,8 +7,8 @@ import {SafeSingletonDeployer} from "safe-singleton-deployer-sol/src/SafeSinglet
 import {CoinbaseSmartWallet, CoinbaseSmartWalletFactory} from "../src/CoinbaseSmartWalletFactory.sol";
 
 contract DeployFactoryScript is Script {
-    address constant EXPECTED_IMPLEMENTATION = 0x000100abaad02f1cfC8Bbe32bD5a564817339E72;
-    address constant EXPECTED_FACTORY = 0x0BA5ED0c6AA8c49038F819E587E2633c4A9F428a;
+    address constant EXPECTED_IMPLEMENTATION = 0x09655Fb46D2673302AEea47a496C7F4408f5c192;
+    address constant EXPECTED_FACTORY = 0x356336adA1619BeC1Ae4E6D94Dd9c0490DA414a8;
 
     function run() public {
         console2.log("Deploying on chain ID", block.chainid);
